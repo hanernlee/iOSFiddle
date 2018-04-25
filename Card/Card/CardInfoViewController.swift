@@ -13,8 +13,7 @@ class CardInfoViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(oldFrame)
+
     }
     
     @IBAction func close(_ sender: UIButton) {

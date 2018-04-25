@@ -42,7 +42,6 @@ class ViewController: UIViewController {
     
     @objc func handleTap(sender: UITapGestureRecognizer) {
         oldFrame = cardView.frame
-        print(oldFrame)
         performSegue(withIdentifier: "ExpandCardSegue", sender: sender)
     }
 }

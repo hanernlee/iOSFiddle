@@ -21,7 +21,7 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <segue destination="OyQ-W4-Ag4" kind="show" identifier="ExpandCardSegue" id="vqf-Ej-URW"/>
+                        <segue destination="OyQ-W4-Ag4" kind="show" identifier="ExpandCardSegue" customClass="ScaleSegue" customModule="Card" customModuleProvider="target" id="vqf-Ej-URW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -37,7 +37,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QcS-lI-1Ox">
-                                <rect key="frame" x="317" y="50" width="39" height="30"/>
+                                <rect key="frame" x="320" y="52" width="39" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Close"/>
                                 <connections>
