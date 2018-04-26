@@ -40,6 +40,15 @@ class ViewController: UIViewController {
         }
     }
     
+    override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
+        let segue = UnwindScaleSegue(identifier: unwindSegue.identifier, source: unwindSegue.source, destination: unwindSegue.destination)
+        segue.perform()
+    }
+    
+    @IBAction func prepareForUnwind(segue: UIStoryboardSegue) {
+        
+    }
+    
     @objc func handleTap(sender: UITapGestureRecognizer) {
         oldFrame = cardView.frame
         performSegue(withIdentifier: "ExpandCardSegue", sender: sender)
