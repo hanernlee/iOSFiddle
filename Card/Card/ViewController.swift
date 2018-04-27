@@ -20,6 +20,16 @@ class ViewController: UIViewController {
        return cardView
     }()
     
+    let coverImageView: UIImageView = {
+        let coverImageView = UIImageView()
+        coverImageView.frame = CGRect(x: 0, y: 0, width: 300, height: 250)
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.clipsToBounds = true
+        coverImageView.layer.cornerRadius = 14
+        coverImageView.image = UIImage(named: "coverbg")
+        return coverImageView
+    }()
+    
     var oldFrame = CGRect.zero
     
     override func viewDidLoad() {
@@ -27,6 +37,10 @@ class ViewController: UIViewController {
         
         view.addSubview(cardView)
         cardView.center = view.center
+        
+        cardView.addSubview(coverImageView)
+        coverImageView.translatesAutoresizingMaskIntoConstraints = false
+        
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         cardView.addGestureRecognizer(tap)

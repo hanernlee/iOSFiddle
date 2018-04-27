@@ -10,10 +10,22 @@ import UIKit
 
 class CardInfoViewController: UIViewController {
     var oldFrame: CGRect!
+    
+    let coverImageView: UIImageView = {
+        let coverImageView = UIImageView()
+        coverImageView.frame = CGRect(x: 0, y: 0, width: 300, height: 250)
+        coverImageView.contentMode = .scaleAspectFill
+        coverImageView.clipsToBounds = true
+        coverImageView.layer.cornerRadius = 14
+        coverImageView.image = UIImage(named: "coverbg")
+        return coverImageView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        view.addSubview(coverImageView)
+        coverImageView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     @IBAction func close(_ sender: UIButton) {
