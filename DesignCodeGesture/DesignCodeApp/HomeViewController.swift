@@ -17,10 +17,8 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var heroView: UIView!
     @IBOutlet weak var bookView: UIView!
-    @IBOutlet weak var chapter1CollectionView: UICollectionView!
+    @IBOutlet weak var chapterCollectionView: UICollectionView!
     var isStatusBarHidden = false
-
-    let presentSectionViewController = PresentSectionViewController()
     
     @IBAction func playButtonTapped(_ sender: Any) {
         let urlString = "https://player.vimeo.com/external/235468301.hd.mp4?s=e852004d6a46ce569fcf6ef02a7d291ea581358e&profile_id=175"
@@ -39,8 +37,8 @@ class HomeViewController: UIViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         
         scrollView.delegate = self
-        chapter1CollectionView.delegate = self
-        chapter1CollectionView.dataSource = self
+        chapterCollectionView.delegate = self
+        chapterCollectionView.dataSource = self
         
         titleLabel.alpha = 0
         deviceImageView.alpha = 0
@@ -66,19 +64,12 @@ class HomeViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "HomeToSection" {
-            let destination = segue.destination as! SectionViewController
+            let toViewController = segue.destination as! SectionViewController
             let indexPath = sender as! IndexPath
             let section = sections[indexPath.row]
-            destination.section = section
-            destination.sections = sections
-            destination.indexPath = indexPath
-            destination.transitioningDelegate = self
-
-            let attributes = chapter1CollectionView.layoutAttributesForItem(at: indexPath)!
-            let cellFrame = chapter1CollectionView.convert(attributes.frame, to: view)
-
-            presentSectionViewController.cellFrame = cellFrame
-            presentSectionViewController.cellTransform = animateCell(cellFrame: cellFrame)
+            toViewController.section = section
+            toViewController.sections = sections
+            toViewController.indexPath = indexPath
             
             isStatusBarHidden = true
             UIView.animate(withDuration: 0.5, animations: {
@@ -123,14 +114,6 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         performSegue(withIdentifier: "HomeToSection", sender: indexPath)
-    }
-}
-
-extension HomeViewController : UIViewControllerTransitioningDelegate {
-
-    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-
-        return presentSectionViewController
     }
 }
 

@@ -17,11 +17,6 @@ class SectionViewController: UIViewController {
     var section: [String: String]!
     var sections: [[String: String]]!
     var indexPath: IndexPath!
-
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var coverView: UIView!
-    @IBOutlet weak var subheadVisualEffectView: UIVisualEffectView!
-    @IBOutlet weak var closeVisualEffectView: UIVisualEffectView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
