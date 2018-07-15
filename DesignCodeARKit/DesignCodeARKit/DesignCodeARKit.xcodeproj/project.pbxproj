@@ -13,6 +13,7 @@
 		50F8117320FB71DE0089E4F9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F8117120FB71DE0089E4F9 /* Main.storyboard */; };
 		50F8117520FB71E20089E4F9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50F8117420FB71E20089E4F9 /* Assets.xcassets */; };
 		50F8117820FB71E20089E4F9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 50F8117620FB71E20089E4F9 /* LaunchScreen.storyboard */; };
+		50F8118020FB8EA30089E4F9 /* ViewController+ARSCNViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F8117F20FB8EA30089E4F9 /* ViewController+ARSCNViewDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		50F8117420FB71E20089E4F9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		50F8117720FB71E20089E4F9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		50F8117920FB71E20089E4F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50F8117F20FB8EA30089E4F9 /* ViewController+ARSCNViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSCNViewDelegate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +61,7 @@
 				50F8116B20FB71DE0089E4F9 /* AppDelegate.swift */,
 				50F8116D20FB71DE0089E4F9 /* art.scnassets */,
 				50F8116F20FB71DE0089E4F9 /* ViewController.swift */,
+				50F8117F20FB8EA30089E4F9 /* ViewController+ARSCNViewDelegate.swift */,
 				50F8117120FB71DE0089E4F9 /* Main.storyboard */,
 				50F8117420FB71E20089E4F9 /* Assets.xcassets */,
 				50F8117620FB71E20089E4F9 /* LaunchScreen.storyboard */,
@@ -139,6 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50F8118020FB8EA30089E4F9 /* ViewController+ARSCNViewDelegate.swift in Sources */,
 				50F8117020FB71DE0089E4F9 /* ViewController.swift in Sources */,
 				50F8116C20FB71DE0089E4F9 /* AppDelegate.swift in Sources */,
 			);
