@@ -14,6 +14,9 @@ class ViewController: UIViewController {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    var focusSquare: FocusSquare?
+    var screenCenter: CGPoint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -27,11 +30,20 @@ class ViewController: UIViewController {
         sceneView.autoenablesDefaultLighting = true
         sceneView.automaticallyUpdatesLighting = true
         
+        screenCenter = view.center
+        
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/iPhoneX/iPhoneX.scn")!
+//        let scene = SCNScene(named: "art.scnassets/iPhoneX/iPhoneX.scn")!
         
         // Set the scene to the view
 //        sceneView.scene = scene
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        let viewCenter = CGPoint(x: size.width / 2, y: size.height / 2)
+        screenCenter = viewCenter
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +62,21 @@ class ViewController: UIViewController {
         
         // Pause the view's session
         sceneView.session.pause()
+    }
+    
+    func updateFocusSquare() {
+        guard let focusSquareLocal = focusSquare else { return }
+        let hitTest = sceneView.hitTest(screenCenter, types: .existingPlaneUsingExtent)
+        
+        if let hitTestResult = hitTest.first {
+            print("Focus square hits a plane")
+            
+            let canAddNewModel = hitTestResult.anchor is ARPlaneAnchor
+            focusSquareLocal.isClosed = canAddNewModel
+        } else {
+            print("Focus square does not hit a plane")
+            focusSquareLocal.isClosed = false
+        }
     }
     
     override func didReceiveMemoryWarning() {
