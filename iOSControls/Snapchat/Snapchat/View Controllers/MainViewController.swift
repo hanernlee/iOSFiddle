@@ -85,12 +85,27 @@ extension MainViewController {
   }
 }
 
+// MARK: ScrollViewControllerDelegate
 extension MainViewController: ScrollViewControllerDelegate {
-    var viewControllers: [UIViewController?] {
-        return [chatViewController, lensViewController, discoverViewController]
-    }
+  
+  var viewControllers: [UIViewController?] {
+    return [chatViewController, lensViewController, discoverViewController]
+  }
+  
+  var initialViewController: UIViewController {
+    return lensViewController
+  }
+  
+  func scrollViewDidScroll() {
     
-    var initialViewController: UIViewController {
-        return lensViewController
-    }
+    // calculate percentage for animation
+    let min: CGFloat = 0
+    let max: CGFloat = scrollViewController.pageSize.width
+    let x = scrollViewController.scrollView.contentOffset.x
+    
+    let result = ((x - min) / (max - min)) - 1
+    
+    navigationView.animate(to: result)
+  }
 }
+

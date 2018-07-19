@@ -56,7 +56,7 @@ extension NavigationView {
   }
   
   func animateIconCenter(offset: CGFloat) {
-    // Move chat and story icons towards the center
+    // Move chat and discover icons towards the center
     // Subtract the original multiplier and add in the new
     // multiplier as constant values
     
@@ -82,9 +82,7 @@ extension NavigationView {
     let distance = 0.23 * bounds.width
     
     // use percent as it has the correct sign
-    let transform =
-      indicatorTransform.translatedBy(x: distance * percent,
-                                      y: 0)
+    let transform = indicatorTransform.translatedBy(x: distance * percent, y: 0)
     indicator.transform = transform.concatenating(scaleTransform)
     indicator.alpha = offset
   }
