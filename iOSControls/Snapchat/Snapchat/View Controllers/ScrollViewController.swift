@@ -84,6 +84,17 @@ class ScrollViewController: UIViewController {
       setController(to: controller, animated: false)
     }
   }
+    
+  public func isControllerVisible(_ controller: UIViewController?) -> Bool {
+    guard controller != nil else { return false }
+    for i in 0..<viewControllers.count {
+        if viewControllers[i] == controller {
+            let controllerFrame = frame(for: i)
+            return controllerFrame.intersects(scrollView.bounds)
+        }
+    }
+    return false
+  }
 }
 
 // MARK: - Private methods

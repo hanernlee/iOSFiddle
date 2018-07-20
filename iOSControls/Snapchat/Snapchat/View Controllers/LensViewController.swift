@@ -52,18 +52,51 @@ class LensViewController: UIViewController {
 }
 
 // MARK: UICollectionViewDelegate
+extension LensViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let side = lensCollectionView.frame.height * 0.9
+        return CGSize(width: side, height: side)
+    }
+}
+
 extension LensViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return 0
+    return lensFiltersImages.count
   }
 }
 
 // MARK: UICollectionViewDataSource
 extension LensViewController: UICollectionViewDataSource {
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-    return UICollectionViewCell()
+    guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LensCircleCell.identifier, for: indexPath) as? LensCircleCell else { fatalError() }
+    cell.image = lensFiltersImages[indexPath.row]
+    return cell
   }
 }
 
 // MARK: UIScrollViewDelegate
-extension LensViewController: UIScrollViewDelegate { }
+extension LensViewController: UIScrollViewDelegate {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let bounds = lensCollectionView.bounds
+        
+        let xPosition = bounds.origin.x + bounds.size.width / 2.0
+        let yPosition = bounds.size.height / 2.0
+        
+        let xyPoint = CGPoint(x: xPosition, y: yPosition)
+        
+        guard let indexPath = lensCollectionView.indexPathForItem(at: xyPoint) else { return }
+        
+        lensCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        faceImage.image = lensFiltersImages[indexPath.row]
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            scrollViewDidEndDecelerating(scrollView)
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        scrollViewDidEndDecelerating(scrollView)
+    }
+}

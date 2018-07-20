@@ -105,7 +105,15 @@ extension MainViewController: ScrollViewControllerDelegate {
     
     let result = ((x - min) / (max - min)) - 1
     
-    navigationView.animate(to: result)
+    var controller: UIViewController?
+    
+    if scrollViewController.isControllerVisible(chatViewController) {
+        controller = chatViewController
+    } else if scrollViewController.isControllerVisible(discoverViewController) {
+        controller = discoverViewController
+    }
+    
+    navigationView.animate(to: controller, percent: result)
   }
 }
 

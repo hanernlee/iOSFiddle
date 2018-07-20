@@ -113,7 +113,7 @@ class NavigationView: UIView {
     return view == self ? nil : view
   }
   
-  func animate(to percent: CGFloat) {
+  func animate(to controller: UIViewController?, percent: CGFloat) {
 
     let offset = abs(percent)
 
@@ -127,6 +127,14 @@ class NavigationView: UIView {
     animateIconCenter(offset: offset)
 
     animateBottomBar(percent: percent)
+    
+    if let controller = controller as? ColoredView {
+        colorView.backgroundColor = controller.controllerColor
+    }
+    
+    var colorOffset = (offset - 0.2) / (0.8 - 0.2)
+    colorOffset = min(max(colorOffset, 0), 1)
+    colorView.alpha = colorOffset
 
     layoutIfNeeded()
   }
