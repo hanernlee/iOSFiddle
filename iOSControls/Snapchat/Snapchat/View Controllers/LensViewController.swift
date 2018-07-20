@@ -49,6 +49,18 @@ class LensViewController: UIViewController {
     lensCollectionView.decelerationRate = UIScrollView.DecelerationRate.fast
     lensCollectionView.register(LensCircleCell.self, forCellWithReuseIdentifier: LensCircleCell.identifier)
   }
+    
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    
+    let middleIndexPath = IndexPath(item: lensFiltersImages.count / 2, section: 0)
+    selectCell(for: middleIndexPath, animated: false)
+  }
+    
+  private func selectCell(for indexPath: IndexPath, animated: Bool) {
+    lensCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: animated)
+    faceImage.image = lensFiltersImages[indexPath.row]
+  }
 }
 
 // MARK: UICollectionViewDelegate
@@ -62,6 +74,10 @@ extension LensViewController: UICollectionViewDelegateFlowLayout {
 extension LensViewController: UICollectionViewDelegate {
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     return lensFiltersImages.count
+  }
+ 
+  func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    selectCell(for: indexPath, animated: true)
   }
 }
 
@@ -86,8 +102,7 @@ extension LensViewController: UIScrollViewDelegate {
         
         guard let indexPath = lensCollectionView.indexPathForItem(at: xyPoint) else { return }
         
-        lensCollectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-        faceImage.image = lensFiltersImages[indexPath.row]
+        selectCell(for: indexPath, animated: true)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
