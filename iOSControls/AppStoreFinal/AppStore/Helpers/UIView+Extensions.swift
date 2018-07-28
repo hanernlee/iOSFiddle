@@ -30,14 +30,16 @@ import Foundation
 import UIKit
 
 extension UIView {
-    func createImage() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)
-        drawHierarchy(in: frame, afterScreenUpdates: true)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
-    }
+  
+  func createImage() -> UIImage? {
+    
+    UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)
+    drawHierarchy(in: frame, afterScreenUpdates: true)
+    
+    let image = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
+    
+    return image
+  }
 }
 

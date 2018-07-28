@@ -29,15 +29,30 @@
 import Foundation
 import UIKit
 
-extension UIView {
-    func createImage() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)
-        drawHierarchy(in: frame, afterScreenUpdates: true)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
+class GenericTableViewCell<View: UIView>: UITableViewCell {
+  
+  var cellView: View? {
+    didSet {
+      guard cellView != nil else { return }
+      setUpViews()
     }
+  }
+  
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+    super.init(style: .default, reuseIdentifier: reuseIdentifier)
+    selectionStyle = .none
+    backgroundColor = .backgroundColor
+  }
+  
+  required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
+  private func setUpViews() {
+    guard let cellView = cellView else { return }
+    
+    addSubview(cellView)
+    cellView.pinEdgesToSuperview()
+  }
 }
 

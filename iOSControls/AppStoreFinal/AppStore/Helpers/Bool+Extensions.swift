@@ -27,17 +27,17 @@
 /// THE SOFTWARE.
 
 import Foundation
-import UIKit
 
-extension UIView {
-    func createImage() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)
-        drawHierarchy(in: frame, afterScreenUpdates: true)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
+extension String {
+  func boolValue() -> Bool? {
+    switch lowercased() {
+    case "true", "yes", "1":
+      return true
+    case "false", "no", "0":
+      return false
+    default:
+      return nil
     }
+  }
 }
 

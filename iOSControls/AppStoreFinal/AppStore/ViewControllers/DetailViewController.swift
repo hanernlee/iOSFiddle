@@ -32,6 +32,7 @@ import UIKit
 class DetailViewController: UIViewController {
   
   private let snapshotView = UIImageView()
+  
   private let scrollView = UIScrollView()
   private let closeButton = UIButton(type: UIButton.ButtonType.custom)
   private let cardViewModel: CardViewModel
@@ -134,13 +135,15 @@ class DetailViewController: UIViewController {
     scrollView.translatesAutoresizingMaskIntoConstraints = false
     scrollView.addConstraints([centerX, width, top])
     scrollView.pin(toView: textLabel, attributes: [.bottom], multiplier: 1.0, constant: 0.0)
+    scrollView.delegate = self
   }
   
   @objc func close() {
     dismiss(animated: true, completion: nil)
   }
-    
+  
   private func createSnapshotOfView() {
+    
     snapshotView.clipsToBounds = true
     snapshotView.backgroundColor = .white
     snapshotView.isUserInteractionEnabled = true
@@ -166,25 +169,27 @@ extension DetailViewController: UIScrollViewDelegate {
     let yContentOffset = scrollView.contentOffset.y
     
     if yContentOffset < 0 && scrollView.isTracking {
-        print("hereree")
-        viewsAreHidden = true
-        snapshotView.isHidden = false
+      
+      viewsAreHidden = true
+      snapshotView.isHidden = false
+      
+      let scale = (100 + yContentOffset) / 100
+      
+      snapshotView.transform = CGAffineTransform(scaleX: scale, y: scale)
+      snapshotView.layer.cornerRadius = -yContentOffset > yPositionForDismissal ? yPositionForDismissal : -yContentOffset
+      
+      if yPositionForDismissal + yContentOffset <= 0 {
+        let contentOffset = CGPoint(x: 0, y: -yPositionForDismissal)
+        scrollView.setContentOffset(contentOffset, animated: false)
         
-        let scale = (100 + yContentOffset) / 100 
-        snapshotView.transform = CGAffineTransform(scaleX: scale, y: scale)
-        snapshotView.layer.cornerRadius = -yContentOffset > yPositionForDismissal ? yPositionForDismissal : -yContentOffset
-        
-        if yPositionForDismissal + yContentOffset <= 0 {
-            let contentOffset = CGPoint(x: 0, y: -yPositionForDismissal)
-            scrollView.setContentOffset(contentOffset, animated: true)
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                self.close()
-            }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          self.close()
         }
+      }
+      
     } else {
-        viewsAreHidden = false
-        snapshotView.isHidden = true
+      viewsAreHidden = false
+      snapshotView.isHidden = true
     }
   }
 }

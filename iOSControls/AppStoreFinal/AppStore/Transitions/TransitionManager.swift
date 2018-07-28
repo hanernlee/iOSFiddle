@@ -32,13 +32,12 @@ import UIKit
 enum TransitionType {
   case presentation
   case dismissal
-    
+  
   var blurAlpha: CGFloat { return self == .presentation ? 1 : 0 }
   var dimAlpha: CGFloat { return self == .presentation ? 0.1 : 0 }
   var cardMode: CardViewMode { return self == .presentation ? .card : .full }
-  var cornerRadius: CGFloat { return self == .presentation ? 20: 0 }
+  var cornerRadius: CGFloat { return self == .presentation ? 20 : 0 }
   var next: TransitionType { return self == .presentation ? .dismissal : .presentation }
-    
 }
 
 class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning {
@@ -52,7 +51,7 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning {
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.light)
     return UIVisualEffectView(effect: blurEffect)
   }()
-    
+  
   private let dimmingView: UIView = {
     let view = UIView()
     view.backgroundColor = .black
@@ -89,8 +88,10 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning {
   }
   
   func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    
+    // Remove all views from container to start fresh and add the background views
     let containerView = transitionContext.containerView
-    containerView.subviews.forEach { $0.removeFromSuperview()}
+    containerView.subviews.forEach{ $0.removeFromSuperview() }
     addBackgroundViews(containerView: containerView)
     
     let fromVC = transitionContext.viewController(forKey: .from)
@@ -98,66 +99,73 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning {
     
     guard let cardView = transition == .presentation ? (fromVC as! TodayViewController).selectedCellCardView() : (toVC as! TodayViewController).selectedCellCardView() else { return }
     
+    // Hide the original cardView so that you can seamlessly scale the cardViewCopy to be smaller and add the copy
     cardView.isHidden = true
     let cardViewCopy = createCardViewCopy(cardView: cardView)
     containerView.addSubview(cardViewCopy)
     
+    // Get the absolute rect for your cardViewCopy to set the frame
     let absoluteCardViewFrame = cardView.convert(cardView.frame, to: nil)
     cardViewCopy.frame = absoluteCardViewFrame
     
+    // Configure and insert whiteStrip view to animate with the cardView
     whiteScrollView.frame = transition == .presentation ? cardView.containerView.frame : containerView.frame
     whiteScrollView.layer.cornerRadius = transition.cornerRadius
     cardViewCopy.insertSubview(whiteScrollView, aboveSubview: cardViewCopy.shadowView)
     
+    
     if transition == .presentation {
-        print("here")
-        let toVC = toVC as! DetailViewController
-        containerView.addSubview(toVC.view)
-        toVC.viewsAreHidden = true
-        
-        moveAndConvertCardView(cardView: cardViewCopy, containerView: containerView, yOriginToMoveTo: 0) {
-            cardView.isHidden = false
-            toVC.viewsAreHidden = false
-            cardViewCopy.removeFromSuperview()
-            transitionContext.completeTransition(true)
-        }
+      let toVC = toVC as! DetailViewController
+      containerView.addSubview(toVC.view)
+      toVC.viewsAreHidden = true
+      
+      moveAndConvertCardView(cardView: cardViewCopy, containerView: containerView, yOriginToMoveTo: 0) {
+        cardView.isHidden = false
+        toVC.viewsAreHidden = false
+        cardViewCopy.removeFromSuperview()
+        transitionContext.completeTransition(true)
+      }
+      
     } else {
-        let fromVC = fromVC as! DetailViewController
-        cardViewCopy.frame = fromVC.cardView!.frame
-        fromVC.viewsAreHidden = true
+      
+      let fromVC = fromVC as! DetailViewController
+      cardViewCopy.frame = fromVC.cardView!.frame
+      fromVC.viewsAreHidden = true
+      
+      moveAndConvertCardView(cardView: cardViewCopy, containerView: containerView, yOriginToMoveTo: absoluteCardViewFrame.origin.y) {
         
-        moveAndConvertCardView(cardView: cardViewCopy, containerView: containerView, yOriginToMoveTo: absoluteCardViewFrame.origin.y) {
-            cardView.isHidden = false
-            transitionContext.completeTransition(true)
-        }
+        cardView.isHidden = false
+        transitionContext.completeTransition(true)
+      }
     }
   }
-    
+  
   private func makeShrinkAnimator(for cardView: CardView) -> UIViewPropertyAnimator {
     return UIViewPropertyAnimator(duration: shrinkDuration, curve: .easeOut, animations: {
-        cardView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        self.dimmingView.alpha = 0.05
+      
+      cardView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+      self.dimmingView.alpha = 0.05
     })
   }
+  
+  private func makeExpandContractAnimator(for cardView: CardView, containerView: UIView, yOrigin: CGFloat) -> UIViewPropertyAnimator {
     
-    private func makeExpandContractAnimator(for cardView: CardView, containerView: UIView, yOrigin: CGFloat) -> UIViewPropertyAnimator {
     let springTiming = UISpringTimingParameters(dampingRatio: 0.75, initialVelocity: CGVector(dx: 0, dy: 4))
     let animator = UIViewPropertyAnimator(duration: transitionDuration - shrinkDuration, timingParameters: springTiming)
     
     animator.addAnimations {
-        cardView.transform = CGAffineTransform.identity
-        cardView.containerView.layer.cornerRadius = self.transition.next.cornerRadius
-        cardView.frame.origin.y = yOrigin
-        
-        self.blurEffectView.alpha = self.transition.blurAlpha
-        self.dimmingView.alpha = self.transition.dimAlpha
-        
-        self.whiteScrollView.layer.cornerRadius = cardView.containerView.layer.cornerRadius
-        
-        containerView.layoutIfNeeded()
-        
-        self.whiteScrollView.frame = self.transition == .presentation ? containerView.frame : cardView.containerView.frame
-
+      cardView.transform = CGAffineTransform.identity
+      cardView.containerView.layer.cornerRadius = self.transition.next.cornerRadius
+      cardView.frame.origin.y = yOrigin
+      
+      self.blurEffectView.alpha = self.transition.blurAlpha
+      self.dimmingView.alpha = self.transition.dimAlpha
+      
+      self.whiteScrollView.layer.cornerRadius = cardView.containerView.layer.cornerRadius
+      
+      containerView.layoutIfNeeded()
+      
+      self.whiteScrollView.frame = self.transition == .presentation ? containerView.frame : cardView.containerView.frame
     }
     
     return animator
@@ -165,26 +173,27 @@ class TransitionManager: NSObject, UIViewControllerAnimatedTransitioning {
   
   //MARK: Animation methods
   private func moveAndConvertCardView(cardView: CardView, containerView: UIView, yOriginToMoveTo: CGFloat, completion: @escaping () ->()) {
+
     let shrinkAnimator = makeShrinkAnimator(for: cardView)
     let expandAnimator = makeExpandContractAnimator(for: cardView, containerView: containerView, yOrigin: yOriginToMoveTo)
     
-    expandAnimator.addCompletion({ (_) in
-        completion()
-    })
+    expandAnimator.addCompletion { (_) in
+      completion()
+    }
     
     if self.transition == .presentation {
-        shrinkAnimator.addCompletion { (_) in
-            cardView.layoutIfNeeded()
-            cardView.updateLayout(for: self.transition.next.cardMode)
-            
-            expandAnimator.startAnimation()
-        }
-        
-        shrinkAnimator.startAnimation()
-    } else {
+      shrinkAnimator.addCompletion { (_) in
         cardView.layoutIfNeeded()
         cardView.updateLayout(for: self.transition.next.cardMode)
+        
         expandAnimator.startAnimation()
+      }
+      
+      shrinkAnimator.startAnimation()
+    } else {
+      cardView.layoutIfNeeded()
+      cardView.updateLayout(for: self.transition.next.cardMode)
+      expandAnimator.startAnimation()
     }
   }
 }

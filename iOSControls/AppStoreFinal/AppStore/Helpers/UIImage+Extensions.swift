@@ -29,15 +29,16 @@
 import Foundation
 import UIKit
 
-extension UIView {
-    func createImage() -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(frame.size, false, 0)
-        drawHierarchy(in: frame, afterScreenUpdates: true)
-        
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return image
+extension UIImage {
+  func imageWith(newSize: CGSize) -> UIImage {
+    let renderer = UIGraphicsImageRenderer(size:newSize)
+    let image = renderer.image {_ in
+      draw(in: CGRect.init(origin: CGPoint.zero, size: newSize))
     }
+    
+    return image
+  }
 }
+
+
 
