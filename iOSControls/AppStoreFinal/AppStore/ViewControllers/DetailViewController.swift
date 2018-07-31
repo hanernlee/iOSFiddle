@@ -192,6 +192,10 @@ extension DetailViewController: UIScrollViewDelegate {
       snapshotView.isHidden = true
     }
   }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        snapshotView.transform = CGAffineTransform.identity
+    }
 }
 
 
